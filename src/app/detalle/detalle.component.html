@@ -1,0 +1,15 @@
+
+<PullToRefresh (refresh)="onPull($event)">
+    <GridLayout rows="*,auto,auto" columns="*,*" verticalAlignment="top" class="list-group-item">
+        <ListView class="list-group" [items]="this.comentario.mostrarComentarios()"
+                  style="background-color:aliceblue" row="0" col="0">
+            <ng-template let-x="item">
+                <label [text]="x"></label>
+            </ng-template>
+        </ListView>
+        <Button text="OK!" row="0" col="1" (tap)="botonClicado()"></Button>
+        <Button text="Corregir!" row="1" col="1" (tap)="botonCorregir()" (longPress)="onLongPress($event)"></Button>
+
+    </GridLayout>
+</PullToRefresh>
+
