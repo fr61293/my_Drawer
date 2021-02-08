@@ -6,13 +6,12 @@ import { NoticiasServices } from "./domain/noticias.service";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { ActionReducerMap , StoreModule as NgRxStoreModule } from "@ngrx/store";
-import {
-    intializeNoticias,
-    noticiasEffects,
-    NoticiasState,
-    reducerNoticias
-} from "./domain/noticias-state.model"
+
+import { intializeNoticiasState, noticiasEffects, NoticiasState, reducerNoticias } from "./domain/noticias-state.model";
 import { EffectsModule } from "@ngrx/effects";
+
+
+// inicio redux
 export interface AppState{
     noticias: NoticiasState;
 }
@@ -22,8 +21,10 @@ const reducers: ActionReducerMap<AppState> ={
 };
 
 const reducersInitialState = {
-    noticias: intializeNoticias()
+    //noticias: intializeNoticias()
+    noticias: initializeNoticiasState()
 }
+// fin redux
 
 @NgModule({
     bootstrap: [
@@ -33,7 +34,7 @@ const reducersInitialState = {
         AppRoutingModule,
         NativeScriptModule,
         NativeScriptUISideDrawerModule,
-        NgRxStoreModule.forRoot(reducers, {initialState: reducersInitialState}),
+        NgRxStoreModule.forRoot(reducers, { initialState: reducersInitialState}),
         EffectsModule.forRoot([noticiasEffects])
     ],
     declarations: [
@@ -46,3 +47,12 @@ const reducersInitialState = {
 })
 
 export class AppModule { }
+
+function initializeNoticiasState() {
+    throw new Error("Function not implemented.");
+}
+/*
+function intializeNoticias() {
+    throw new Error("Function not implemented.");
+}*/
+

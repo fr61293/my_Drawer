@@ -1,3 +1,4 @@
+import { filter } from 'rxjs/operators';
 
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { RadSideDrawer } from "nativescript-ui-sidedrawer";
@@ -8,17 +9,21 @@ import * as Toast from "nativescript-toasts";
 import { AppState } from "../app.module";
 import { Store } from "@ngrx/store";
 import { Noticia, NuevaNoticiaAction } from "../domain/noticias-state.model";
+import { layout } from '@nativescript/core/utils';
+
 @Component({
     selector: "Search",
     templateUrl: "./search.component.html",
   //  providers: [NoticiasServices]
 })
+  
 export class SearchComponent implements OnInit {
   resultados: Array<string>;
   textFieldValue: string;
   @ViewChild("layout") layout: ElementRef;
 
-    constructor(private noticias: NoticiasServices, 
+  constructor(
+      private noticias: NoticiasServices, 
       private routerExtensions: RouterExtensions,
       private store: Store<AppState>
       ) {
@@ -30,7 +35,7 @@ export class SearchComponent implements OnInit {
       .subscribe((data)=>{
         const f = data;
         if(f != null){
-          Toast.show({text: "Sugerimos leer: "+f.titulo, duration: Toast.DURATION.SHORT});
+          Toast.show({text: "Sugerimos leer: " + f.titulo, duration: Toast.DURATION.SHORT});
         }
       });
     }
@@ -39,15 +44,13 @@ export class SearchComponent implements OnInit {
         const sideDrawer = <RadSideDrawer>Application.getRootView();
         sideDrawer.showDrawer();
     }
-	
+    /*
     onButtonTap(){
       this.noticias.agregar(this.textFieldValue).then((r: any)=>{
         console.log("resultados buscar ahora"+JSON.stringify(r));
         this.resultados  = r;      
       });
-    }
-
-
+    }*/
 
     onItemTap(x): void {
       console.dir(x);
@@ -58,16 +61,16 @@ export class SearchComponent implements OnInit {
     //     }
     // });
 
-       this.store.dispatch(new NuevaNoticiaAction(new Noticia(x.view.bindingContext)));
+    this.store.dispatch(new NuevaNoticiaAction(new Noticia(x.view.bindingContext)));
 
     }
 
     
     buscarAhora(s: string ) {
-
+      
       console.dir("Buscar ahora"+s);
       this.noticias.buscar(s).then((r: any)=>{
-        console.log("resultados buscar ahora"+JSON.stringify(r));
+        console.log("resultados buscar ahora: "+JSON.stringify(r));
         this.resultados  = r;
       },(e) => {
         console.log("error buscar ahora"+e);

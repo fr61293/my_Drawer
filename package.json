@@ -9,7 +9,7 @@
   "license": "SEE LICENSE IN <your-license-filename>",
   "publishConfig": {
     "access": "public"
-  }, 
+  },
   "keywords": [
     "nstudio",
     "nativescript",
@@ -43,8 +43,8 @@
     "@nativescript/angular": "~11.0.0",
     "@nativescript/core": "~7.0.0",
     "@nativescript/theme": "~2.3.0",
-    "@ngrx/effects": "^10.1.0",
-    "@ngrx/store": "^10.1.0",
+    "@ngrx/effects": "^10.1.2",
+    "@ngrx/store": "^10.1.2",
     "@nstudio/nativescript-pulltorefresh": "^3.0.1",
     "@schematics/angular": "^9.1.0",
     "nativescript-couchbase": "^1.0.18",

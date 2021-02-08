@@ -15,18 +15,22 @@ export interface NoticiasState{
     sugerida: Noticia;
 }
 
-
-
-
-export function  intializeNoticias(){
+export function  intializeNoticiasState(){
     return {
         items: [],
         sugerida: null    
     };
 };
+/*
+export function  intializeNoticias(){
+    return {
+        items: [],
+        sugerida: null    
+    };
+};*/
 
 //Acciones
-export enum NoticiasActiontype{
+export enum NoticiasActionTypes {
     INIT_MY_DATA = '[Noticias] Init My Data',
     NUEVA_NOTICIA = '[Noticias] Nueva',
     SUGERIR_NOTICIA = '[Noticias] Sugerir'
@@ -34,24 +38,22 @@ export enum NoticiasActiontype{
 }
 
 export class InitMyDataAction  implements Action{
-    type= NoticiasActiontype.INIT_MY_DATA;
+    type= NoticiasActionTypes.INIT_MY_DATA;
     constructor(public titulares: Array<string>){ }
 
 }
 
 export class NuevaNoticiaAction implements Action{
-    type= NoticiasActiontype.NUEVA_NOTICIA;
+    type= NoticiasActionTypes.NUEVA_NOTICIA;
     constructor(public noticia: Noticia){ }
 
 }
-
 
 export class SugerirAction implements Action{
-    type= NoticiasActiontype.SUGERIR_NOTICIA;
+    type= NoticiasActionTypes.SUGERIR_NOTICIA;
     constructor(public noticia: Noticia){ }
 
 }
-
 
 export type NoticiasViajesActions = InitMyDataAction | NuevaNoticiaAction
 |SugerirAction  
@@ -61,42 +63,42 @@ export type NoticiasViajesActions = InitMyDataAction | NuevaNoticiaAction
 export function reducerNoticias(
     state: NoticiasState,
     action: NoticiasViajesActions
-):NoticiasState{
+):NoticiasState {
  switch(action.type)
     {
-        case NoticiasActiontype.INIT_MY_DATA: {
+        case NoticiasActionTypes.INIT_MY_DATA: {
             const titulares: Array<string> = (action as InitMyDataAction).titulares;
        
-            return { ...state,
-                items: titulares.map((t) => new Noticia(t)) };
+         return {
+             ...state,
+             items: titulares.map((t) => new Noticia(t))
+         };
         }
-        case NoticiasActiontype.NUEVA_NOTICIA: {
+        case NoticiasActionTypes.NUEVA_NOTICIA: {
             return {
                 ...state,
                 items: [...state.items, (action as NuevaNoticiaAction).noticia]
             };
         }
-        case NoticiasActiontype.SUGERIR_NOTICIA: {
+        case NoticiasActionTypes.SUGERIR_NOTICIA: {
        
             return {
                 ...state,
                 sugerida: (action as SugerirAction).noticia
                
             };
-        }     
-
-     
-
+        } 
     }
 return state;
 
 }
+
 //effects 
 @Injectable()
 export class noticiasEffects{
     @Effect()
     nuevoagregado: Observable<Action> = this.actions$.pipe(
-        ofType(NoticiasActiontype.NUEVA_NOTICIA),
+        ofType(NoticiasActionTypes.NUEVA_NOTICIA),
         map((action: NuevaNoticiaAction)=> new SugerirAction(action.noticia))
     );
         constructor(private actions$: Actions){}

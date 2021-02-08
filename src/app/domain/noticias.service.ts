@@ -5,12 +5,12 @@ const sqlite = require("nativescript-sqlite");
 
 @Injectable()
 export class NoticiasServices {
-    api: string = "https://43cdcb225eec.ngrok.io";
+    api: string = "https://ffccaa9b7c5c.ngrok.io";
     database: couchbaseModule.Couchbase; 
     
 
     constructor(){
-        this.database = new couchbaseModule.Couchbase("test-database"); 
+      this.database = new couchbaseModule.Couchbase("test-database"); 
 
         this.getDB((db)=>{
             console.dir(db);
@@ -18,7 +18,7 @@ export class NoticiasServices {
              (err, fila)=> console.log("fila: ",fila),
              (err, totales)=> console.log("filas totales ",totales));
         }, () =>     console.error("error en getDB"));
-
+       
         this.database.createView("logs", "1", (document, emitter) =>
         emitter.emit(document._id, document));
          const rows = this.database.executeQuery("logs", {limit : 200});
@@ -29,10 +29,10 @@ export class NoticiasServices {
     getDB(fnOk, fnError){
         return new sqlite("mi_db_logs", (err, db)=>{
             if (err) {
-                console.error("error al abrir db", err);
+                console.error("error al abrir db: ", err);
             }else{
-                console.log("esta abierta la db", db.isOpen() ? "Si": "No");
-                db.execSQL("create table if not exits logs (id INTEGER PRIMARY KEY AUTOINCREMENT, text TEXT)")
+                console.log("esta abierta la db: ", db.isOpen() ? "Si": "No");
+                db.execSQL("CREATE TABLE IF NOT EXITS logs (id INTEGER PRIMARY KEY AUTOINCREMENT, text TEXT)")
                 .then((id) =>{
                     console.log("CREATE TABLE OK");
                     fnOk(db);
@@ -43,17 +43,19 @@ export class NoticiasServices {
             }
         });  
 
-    }
+    }/*
     private noticias: Array<string>=[];
    
-
+    */
 
     agregar(s: string){
        return request({
            url: this.api+"/favs",
            method: "POST",
            headers: {"Content-Type":"application/json"},
-           content: JSON.stringify({ nuevo: s})
+           content: JSON.stringify({
+               nuevo: s
+           })
        });
     }
     
@@ -63,15 +65,15 @@ export class NoticiasServices {
     }
 
     buscar(s: string){
-        
+       
         this.getDB((db)=> {
-            db.execSQL("insert into logs(texto) values(?)", [s],
+            db.execSQL("insert into logs (texto) values (?)", [s],
             (err, id) => console.log("nuevo id:  ", id));
         }, ()=>console.error("error en getDB"));
         
         const documentId = this.database.createDocument({ texto: s });
         console.log("nuevo id couchbase: ", documentId); 
        
-        return getJSON(this.api+"/get?q="+s);
+        return getJSON(this.api+"/get?q=" + s);
     }
 }
